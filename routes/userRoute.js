@@ -10,6 +10,20 @@ const { sendOTP } = require('../utils/email');
 const auth = require('../middlewares/auth');
 require('dotenv').config();
 
+userRouter.get('/users/:email', auth, async(req ,res) => {
+    try {
+        const {email} = req.params;
+        const user = await UserModel.findOne({email});
+        if(!user){
+            return res.status(400).send({msg : 'User not found!'});
+        }
+
+        res.status(200).send({user});
+    } catch (error) {
+        res.status(400).send({msg : error.message});
+    }
+})
+
 userRouter.post('/register', validator, async (req, res) => {
     const { email, password } = req.body;
     try {
