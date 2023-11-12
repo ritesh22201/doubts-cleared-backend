@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const BlacklistModel = require('../models/blacklistModel');
 const TempUserModel = require('../models/tempModel');
 const { sendOTP } = require('../utils/email');
+const auth = require('../middlewares/auth');
 require('dotenv').config();
 
 userRouter.post('/register', validator, async (req, res) => {
@@ -144,6 +145,22 @@ userRouter.post('/login', async (req, res) => {
         }
     } catch (error) {
         res.status(400).send({ msg: error.message });
+    }
+})
+
+userRouter.post('/addClass', auth, async(req, res) => {
+    const {email, grade} = req.body;
+    try {
+        const user = await UserModel.findOne({email});
+        if(!user){
+            return res.status(400).send({msg : 'User not found!'});
+        }
+        user.grade = grade;
+        await user.save();
+
+        res.status(200).send({msg : 'Class added successfully', user});
+    } catch (error) {
+        res.status(400).send({msg : error.message});
     }
 })
 
