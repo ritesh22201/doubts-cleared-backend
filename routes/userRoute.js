@@ -17,7 +17,7 @@ userRouter.post('/register', validator, async (req, res) => {
             await TempUserModel.deleteOne({ email });
         }
 
-        const otp = Math.floor(900000 * Math.random());
+        const otp = Math.floor(100000 + Math.random() * 900000);
         await sendOTP(email, otp);
 
         const hashPassword = await bcrypt.hash(password, 10);
@@ -67,7 +67,7 @@ userRouter.post('/forgetPassword', async (req, res) => {
             return res.status(400).send({ msg: 'User not found!' });
         }
 
-        const otp = Math.floor(900000 * Math.random());
+        const otp = Math.floor(100000 + Math.random() * 900000);
         await sendOTP(email, otp);
 
         user.otp = otp;
