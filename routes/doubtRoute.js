@@ -18,7 +18,17 @@ doubtRouter.post('/createDoubt', auth, async (req, res) => {
     try {
         const studentId = req.body.userId;
         const doubt = await DoubtModel.create({studentId, subject, question, language});
-        res.status(200).send({msg : 'Doubt created successfully', doubt});
+        res.status(200).send({msg : 'Doubt posted successfully', doubt});
+    } catch (error) {
+        res.status(400).send({msg : error.message});
+    }
+})
+
+doubtRouter.delete('/deleteDoubt/:id', auth, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const doubt = await DoubtModel.findByIdAndDelete({_id : id});
+        res.status(200).send({msg : 'Doubt deleted successfully', doubt});
     } catch (error) {
         res.status(400).send({msg : error.message});
     }
