@@ -24,6 +24,23 @@ doubtRouter.post('/createDoubt', auth, async (req, res) => {
     }
 })
 
+doubtRouter.delete('/updateDoubt/:id', auth, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const doubt = await DoubtModel.findOne({_id : id});
+        if(!doubt){
+            return res.status(400).send({msg : 'Doubt not found!'});
+        }
+
+        doubt.isResolved = true;
+        await doubt.save();
+
+        res.status(200).send({msg : 'Doubt updated successfully', doubt});
+    } catch (error) {
+        res.status(400).send({msg : error.message});
+    }
+})
+
 doubtRouter.delete('/deleteDoubt/:id', auth, async (req, res) => {
     const { id } = req.params;
     try {
