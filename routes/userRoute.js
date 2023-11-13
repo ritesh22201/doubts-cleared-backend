@@ -151,7 +151,7 @@ userRouter.post('/login', async (req, res) => {
                 res.status(400).send({ msg: 'Incorrect password!' });
             }
             else {
-                const token = jwt.sign({ userId: user._id, email: user.email }, process.env.secretKey, { expiresIn: '2d' });
+                const token = jwt.sign({ userId: user._id, email: user.email }, process.env.secretKey, { expiresIn: '7d' });
                 user.isVerified = true;
                 await user.save();
                 res.status(200).send({ msg: 'User logged in successfully', token, email: user.email });
