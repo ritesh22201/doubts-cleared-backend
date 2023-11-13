@@ -24,7 +24,7 @@ doubtRouter.post('/createDoubt', auth, async (req, res) => {
     }
 })
 
-doubtRouter.delete('/updateDoubt/:id', auth, async (req, res) => {
+doubtRouter.patch('/updateDoubt/:id', auth, async (req, res) => {
     const { id } = req.params;
     try {
         const doubt = await DoubtModel.findOne({_id : id});
