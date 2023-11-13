@@ -178,8 +178,8 @@ userRouter.post('/addClass', auth, async(req, res) => {
     }
 })
 
-userRouter.get('/logout', async (req, res) => {
-    const { email } = req.body;
+userRouter.patch('/logout/:email', async (req, res) => {
+    const { email } = req.params;
     const token = req.headers?.authorization?.split(' ')[1];
     try {
         const loggedInUser = await UserModel.findOne({ email, isVerified: true });
