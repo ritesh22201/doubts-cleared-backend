@@ -14,10 +14,10 @@ doubtRouter.get('/history', auth, async (req, res) => {
 })
 
 doubtRouter.post('/createDoubt', auth, async (req, res) => {
-    const { subject, question } = req.body;
+    const { subject, question, language } = req.body;
     try {
         const studentId = req.body.userId;
-        const doubt = await DoubtModel.create({studentId, subject, question});
+        const doubt = await DoubtModel.create({studentId, subject, question, language});
         res.status(200).send({msg : 'Doubt created successfully', doubt});
     } catch (error) {
         res.status(400).send({msg : error.message});
