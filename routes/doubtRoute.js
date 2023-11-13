@@ -32,7 +32,7 @@ doubtRouter.patch('/updateDoubt/:id', auth, async (req, res) => {
             return res.status(400).send({msg : 'Doubt not found!'});
         }
 
-        doubt.isResolved = true;
+        doubt.isResolved = !doubt.isResolved;
         await doubt.save();
 
         res.status(200).send({msg : 'Doubt updated successfully', doubt});
