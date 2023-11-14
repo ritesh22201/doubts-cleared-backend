@@ -10,17 +10,17 @@ const { sendOTP } = require('../utils/email');
 const auth = require('../middlewares/auth');
 require('dotenv').config();
 
-userRouter.get('/users/:email', auth, async(req ,res) => {
+userRouter.get('/users/:email', auth, async (req, res) => {
     try {
-        const {email} = req.params;
-        const user = await UserModel.findOne({email});
-        if(!user){
-            return res.status(400).send({msg : 'User not found!'});
+        const { email } = req.params;
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found!' });
         }
 
-        res.status(200).send({user});
+        res.status(200).send({ user });
     } catch (error) {
-        res.status(400).send({msg : error.message});
+        res.status(400).send({ msg: error.message });
     }
 })
 
@@ -131,8 +131,8 @@ userRouter.post('/changePassword', async (req, res) => {
         user.otp = '';
         await user.save();
 
-        res.status(200).send({msg : 'Password updated successfully'});
-        
+        res.status(200).send({ msg: 'Password updated successfully' });
+
     } catch (error) {
         res.status(400).send({ msg: error.message });
     }
@@ -162,19 +162,19 @@ userRouter.post('/login', async (req, res) => {
     }
 })
 
-userRouter.post('/addClass', auth, async(req, res) => {
-    const {email, grade} = req.body;
+userRouter.post('/addClass', auth, async (req, res) => {
+    const { email, grade } = req.body;
     try {
-        const user = await UserModel.findOne({email});
-        if(!user){
-            return res.status(400).send({msg : 'User not found!'});
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found!' });
         }
         user.grade = grade;
         await user.save();
 
-        res.status(200).send({msg : 'Class added successfully', user});
+        res.status(200).send({ msg: 'Class added successfully', user });
     } catch (error) {
-        res.status(400).send({msg : error.message});
+        res.status(400).send({ msg: error.message });
     }
 })
 
@@ -193,6 +193,22 @@ userRouter.patch('/logout/:email', async (req, res) => {
         const blacklistUser = await BlacklistModel.create({ token });
 
         res.status(200).send({ msg: 'User logged out successfully' });
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
+    }
+})
+
+userRouter.put('/updateProfile/:id', auth, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await UserModel.findOne({ _id : id });
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found!' });
+        }
+
+        const updatedUser = await UserModel.findByIdAndUpdate({_id : id}, {...req.body}, {new : true});
+        res.status(200).send({ msg: 'User updated successfully', updatedUser });
+
     } catch (error) {
         res.status(400).send({ msg: error.message });
     }
